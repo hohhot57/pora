@@ -1,0 +1,54 @@
+#include <SPI.h>
+
+const int LATCH_PIN = 8;   // Pin connected to the 74HC595's latch clock
+const int CLOCK_PIN = 7;   // Pin connected to the 74HC595's shift clock
+const int DATA_PIN = 6;    // Pin connected to the 74HC595's serial data
+const int TEMP_PIN = A0;   // Pin connected to the TMP36's output
+
+const int latchPin2 = 10;// latch clock
+const int clockPin2 = 11;//shift clock
+const int dataPin2 = 9 ;//serial data
+
+byte leds = 0b00000000;    // Initialize the LED pattern to all off
+
+void setup() {
+  pinMode(LATCH_PIN, OUTPUT);
+  pinMode(CLOCK_PIN, OUTPUT);
+  pinMode(DATA_PIN, OUTPUT);
+  pinMode(TEMP_PIN, INPUT);
+  
+  pinMode(latchPin2, OUTPUT);// both eyes
+  pinMode(clockPin2, OUTPUT);//both eyes
+  pinMode(dataPin2, OUTPUT);//both eyes
+}
+
+void loop() {
+  digitalWrite(latchPin2, LOW);
+  shiftOut(dataPin2, clockPin2, MSBFIRST, 255);
+  digitalWrite(latchPin2, HIGH);
+  int temp = analogRead(TEMP_PIN) * 0.48875 - 50;   // Convert TMP36 output to Celsius
+  
+  if (temp >= 40 && temp < 80) {   // Turn on first half of LEDs
+    leds = 0b11110000;
+  }
+  else if (temp >= 80) {   // Turn on second half of LEDs
+    leds = 0b00001111;
+    
+  }
+   else if (temp < 40) {   // Turn on second half of LEDs
+    leds = 0b00001111;
+    
+  }
+  
+  else {   // Turn off all LEDs
+    leds = 0b00000000;
+  }
+  
+  // Shift the LED pattern out to the 74HC595
+  digitalWrite(LATCH_PIN, LOW);
+  shiftOut(DATA_PIN, CLOCK_PIN, MSBFIRST, leds);
+  digitalWrite(LATCH_PIN, HIGH);
+  
+  delay(100);   // Wait for a moment before checking temperature again
+}
+
