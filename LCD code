@@ -1,0 +1,74 @@
+// Include the LiquidCrystal library to work with the LCD display
+#include <LiquidCrystal.h>
+
+// Define the LCD object with the pin numbers of the connections to the Arduino
+LiquidCrystal lcd(7, 6, 5, 4, 3, 2);
+
+// Define the pin number of the TMP36 temperature sensor
+const int tempSensorPin = A0;
+
+// Define the custom character for a smiling face using an 8x5 pixel matrix
+byte smiley[8] = {
+  B00000,
+  B01010,
+  B01010,
+  B00000,
+  B00000,
+  B10001,
+  B01110,
+  B00000
+};
+
+// Define the custom character for a sad face using an 8x5 pixel matrix
+byte sad[8] = {
+  B00000,
+  B01010,
+  B01010,
+  B00000,
+  B00000,
+  B01110,
+  B10001,
+  B00000
+};
+
+// Setup function - runs once when the Arduino is powered on or reset
+void setup() {
+  // Create the custom characters using the pixel matrices defined above
+  lcd.createChar(0, smiley);
+  lcd.createChar(1, sad);
+  // Initialize the LCD display with 16 columns and 2 rows
+  lcd.begin(16, 2);
+  // Print the initial message on the LCD display
+  lcd.print("Temp:");
+}
+
+// Loop function - runs repeatedly as long as the Arduino is powered on or reset
+void loop() {
+  // Read the value of the temperature sensor and convert it to a temperature value
+  int temp = analogRead(tempSensorPin);
+  float voltage = temp * 5.0 / 1024.0;
+  float temperature = (voltage - 0.5) * 100.0;
+  
+  // If the temperature is between 40 and 80 degrees Celsius, display a smiley face
+  if (temperature >= 40 && temperature < 80) {
+    // Set the cursor position on the LCD display to display the smiley face
+    lcd.setCursor(5, 0);
+    // Display the smiley face character
+    lcd.write((byte)0);
+  } 
+  // Otherwise, display a sad face
+  else {
+    // Set the cursor position on the LCD display to display the sad face
+    lcd.setCursor(5, 0);
+    // Display the sad face character
+    lcd.write((byte)1);
+  }
+  
+  // Display the temperature value on the LCD display with one decimal place and the Celsius unit
+  lcd.setCursor(9, 0);
+  lcd.print(temperature, 1);
+  lcd.print("C");
+  
+  // Wait for 1 second before repeating the loop
+  delay(1000);
+}
