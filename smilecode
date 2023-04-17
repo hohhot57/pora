@@ -1,0 +1,38 @@
+#include<TFT_eSPI.h>
+#include<SPI.h>
+#include "smile1.h"
+#include "smile30.h"
+#include "smile60.h"
+#include "smile70.h"
+#include "smile80.h"
+#include "smile90.h"
+
+TFT_eSPI tft= TFT_eSPI();
+
+void setup(){
+  Serial.begin(115200);
+  Serial.println("Start");
+  tft.init();
+  tft.setRotation(1);
+  tft.setSwapBytes(true);
+
+}
+
+void loop(){
+  tft.pushImage(0,0,320,240,smile1);
+  delay(150);
+  
+//  tft.pushImage(0,0,320,240,smile30);
+  //delay(10);
+  tft.pushImage(0,0,320,240,smile60);
+  delay(150);
+  tft.pushImage(0,0,320,240,smile70);
+  delay(150);
+  tft.pushImage(0,0,320,240,smile80);
+ delay(150);
+//  tft.pushImage(0,0,320,240,smile90);
+ // delay(150);
+  
+
+
+}
