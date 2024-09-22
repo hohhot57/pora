@@ -1886,6 +1886,7 @@ input, select, textarea {
 		text-decoration: none;
 		position: relative;
 	}
+	
 
 		.icon:before {
 			-moz-osx-font-smoothing: grayscale;
@@ -1978,6 +1979,15 @@ input, select, textarea {
 				.icon.circle.fa-dribbble:hover {
 					background: #df93b8;
 				}
+				.icon.circle.fa-instagram {
+					/*font-size: 1.5em; /* Increase the size slightly */
+					background: #db6b67;
+					color: #fff;
+				}
+				.icon.circle.fa-instagram:hover {
+					background: #df7b77;
+				}
+				
 
 		.icon.featured {
 			cursor: default;
